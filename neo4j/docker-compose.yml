@@ -1,0 +1,43 @@
+version: "3.1"
+
+services:
+  neo4j:
+    image: neo4j:latest
+    hostname: neo4j
+    container_name: neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - ./db:/data
+      - ./logs:/logs \
+      - ./import:/var/lib/neo4j/import \
+      - ./plugins:/plugins
+
+    environment:
+      NEO4J_AUTH: neo4j/test
+
+    networks:
+      - localnet
+
+  datascience-notebook:
+    image: jupyter/minimal-notebook #datascience-notebook
+    volumes:
+      - ./notebooks:/home/jovyan/work
+
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
+      JUPYTER_TOKEN: "psut2021"
+
+    ports:
+      - "8888:8888"
+    container_name: ds-jupyter
+
+    links:
+      - neo4j
+    networks:
+      - localnet
+
+networks:
+  localnet:
+    attachable: true
