@@ -21,7 +21,7 @@ services:
       - localnet
 
   datascience-notebook:
-    image: jupyter/minimal-notebook #datascience-notebook
+    image: jupyter/minimal-notebook
     volumes:
       - ./notebooks:/home/jovyan/work
 
