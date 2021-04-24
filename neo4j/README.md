@@ -1,7 +1,6 @@
 # Create db, logs, plugins, import directories
 
 mkdir db logs plugins import
-docker-compose up
 
 > Data directory, to stores the system information and graph data.
 
@@ -10,6 +9,8 @@ docker-compose up
 > Import directory, we can copy CSV or other flat files into that directory for importing into Neo4j.
 
 > Plugins directory, If we want to include any custom extensions or add the Neo4j APOC or graph algorithms library.
+
+# docker-compose up
 
 # Minimal Jupyter LAB at http://localhost:8888
 
