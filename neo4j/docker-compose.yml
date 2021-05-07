@@ -1,38 +1,53 @@
 version: "3.1"
 
 services:
+  nifi:
+    build:
+      context: ./nifi
+      dockerfile: ./Dockerfile
+    image: psut/nifi
+    container_name: psut_nifi
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./volumes/data:/opt/nifi/uploads
+    networks:
+      - localnet
+
   neo4j:
-    image: neo4j:latest
+    build:
+      context: ./neo4j
+      dockerfile: ./Dockerfile
+    image: psut/neo4j
     hostname: neo4j
-    container_name: neo4j
+    container_name: psut_neo4j
     ports:
       - "7474:7474"
       - "7687:7687"
     volumes:
-      - ./db:/data
-      - ./logs:/logs \
-      - ./import:/var/lib/neo4j/import \
-      - ./plugins:/plugins
-
+      - ./volumes/db:/data
+      - ./volumes/logs:/logs
+      - ./volumes/import:/var/lib/neo4j/import
+      - ./volumes/plugins:/plugins
     environment:
       NEO4J_AUTH: neo4j/test
-
     networks:
       - localnet
 
-  datascience-notebook:
-    image: jupyter/minimal-notebook
+  jupyter:
+    build:
+      context: ./jupyter
+      dockerfile: ./Dockerfile
+    image: psut/jupyter
     volumes:
       - ./notebooks:/home/jovyan/work
-
+      - ./volumes/import:/home/jovyan/work/result
     environment:
       JUPYTER_ENABLE_LAB: "yes"
       JUPYTER_TOKEN: "psut2021"
-
     ports:
       - "8888:8888"
-    container_name: ds-jupyter
-
+    container_name: psut_jupyter
     links:
       - neo4j
     networks:
@@ -41,3 +56,4 @@ services:
 networks:
   localnet:
     attachable: true
+
