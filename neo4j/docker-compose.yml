@@ -10,7 +10,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./volumes/data:/opt/nifi/uploads
+      - ./volumes/import:/opt/nifi/uploads
     networks:
       - localnet
 
