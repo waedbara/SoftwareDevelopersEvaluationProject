@@ -1,6 +1,6 @@
-# Create db, logs, plugins, import directories
+# Running the application
 
-mkdir db logs plugins import
+`mkdir db logs plugins import`
 
 > Data directory, to stores the system information and graph data.
 
@@ -10,8 +10,8 @@ mkdir db logs plugins import
 
 > Plugins directory, If we want to include any custom extensions or add the Neo4j APOC or graph algorithms library.
 
-# docker-compose up
+`docker-compose up`
 
-# Minimal Jupyter LAB at http://localhost:8888
+> Minimal Jupyter LAB at http://localhost:8888
 
-# Neo4j browser: http://localhost:7474/browser/
+> Neo4j browser: http://localhost:7474/browser/
