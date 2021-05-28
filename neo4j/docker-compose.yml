@@ -14,6 +14,22 @@ services:
     networks:
       - localnet
 
+  redis:
+    build:
+      context: ./redis
+      dockerfile: ./Dockerfile
+    image: psut_redis
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 30s
+      retries: 50
+    restart: always
+    networks:
+      - localnet
+
   neo4j:
     build:
       context: ./neo4j
@@ -50,6 +66,39 @@ services:
     container_name: psut_jupyter
     links:
       - neo4j
+    networks:
+      - localnet
+
+  elasticsearch:
+    build:
+      context: ./elasticsearch
+      dockerfile: ./Dockerfile
+    image: psut_eleasticsearch
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
+    volumes:
+      - ./volumes/esdata1:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - localnet
+
+  kibana:
+    build:
+      context: ./kibana
+      dockerfile: ./Dockerfile
+    image: psut_kibana
+    ports:
+      - 5601:5601
+    volumes:
+      - ./volumes/esdata1:/usr/share/elasticsearch/data
     networks:
       - localnet
 
