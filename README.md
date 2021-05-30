@@ -47,39 +47,38 @@ Once the demo is started, you should have the below containers up and running:
 | elasticsearch  | A container running elastic search service to be used for indexing and seaching                                                             |                                                                                         |
 | kibana         | A container running Kibana services to provide visualization capabilities on top of elastic search                                          | [http://localhost:5601](http://localhost:5601)                                          |
 
-# Running the data pipeline
-## Importing the data pipeline template:
-* Through NiFi browser, drag the template icon from top bar to the design area  
+# Apache NiFi Related Work
+## Running the data pipeline
+Follow these [steps](RunningPipeline.md) to run the data pipeline
 
-  ![add template](manual/01-drag-drop-template.png)
-* then select the template
-  
-    ![add template](manual/02-select-template.png)
+## Processors and Services 
+Below table shows the processors and services used through this demo:
+### Processors
+| Processor         | Usage                                                                                                                                                        |
+|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| GetFile           | To pickup and read CSV files                                                                                                                                 |
+| RouteOnAttribute  | To route to data pipeline subflows depending on specific attribute value                                                                                     |
+| LogAttribute      | To emit logs for data files attributes for debugging purposes                                                                                                |
+| LogMessage        | To emit log messages for main milestones in the pipeline                                                                                                     |
+| QueryRecord       | To query records from data file. Also, used to execute a grouping query against data files                                                                   |
+| ExecuteGraphQuery | To execute Cypher queries against Neo4J                                                                                                                      |
+| SplitRecord       | To split a data file into multiple records so each record is transmitted as a single data file                                                               |
+| ConvertRecord     | To convert data files from one type to another (csv to json), (csv to text), (text to csv)                                                                   |
+| Wait              | Used to suspend the execution for the data pipeline at specific stage waiting for a condition to be satisfied                                                |
+| Notify            | Used to notify the waiting processors for specific condition                                                                                                 |
+| ForkRecord        | To split a single record into multiple records, used to split a json record with an array field into multiple records each one with one element of the array |
+| UpdateAttribute   | Update an attribute value in the data file                                                                                                                   |
 
-    After adding the template, you should see the data pipeline as below, see the warnings in yellow which
-    you need to fix before running the application
-    
-    ![Data pipeline](manual/02-fix-warnings.png)
-    
-* You need to activate the controllers configured in the pipeline by clicking on configuration icon (Gear) 
+### Services:
+| Service Type                          | Purpose                                                                                        |
+|---------------------------------------|------------------------------------------------------------------------------------------------|
+| CSVReader                             | To a data file content as a CSV                                                                |
+| CSVRecordSetWriter                    | To write a data file content as CSV                                                            |
+| JsonRecordSetWriter                   | To write a data file content as a Json                                                         |
+| JsonTreeReader                        | To read the data file content and convert it as a Json object                                  |
+| Neo4JCypherClientService              | To manage the connectivity to Neo4J                                                            |
+| RedisConnectionPoolService            | To manage the connectivity to Redis                                                            |
+| RedisDistributedMapCacheClientService | To use Redis as a cache, used by Wait and Notify processors to track listening keys and values |
+| FreeFormTextRecordSetWriter           | To convert data file to a text, mainly used to generate the Cypher queries                     |
 
-  ![Configuration](manual/04-fix-configuration.png)
-* Navigate to controller services before enabling all services, you need to modify Neo4J connection pool by setting
-    the password,  click on configure icon then update the password property by setting it to test
-    
-    ![service configuration](manual/05-configure-neo4j.png)
-    After configurating this service, you need to enable all services
-    
-  ![Enable services](manual/06-enable-services.png)
-* Make sure there are no warnings in pipeline 
-* You can start the data pipeline now by clicking on start button
-* This pipeline waits for a CSV file to be generated under specific path, to generate this file, 
- navigate to jupyter notebook [http://localhost:8888](http://localhost:8888) 
- then you should see under work folder two CSV files: updated_issues.csv and update_emails.csv, you should
- copy them under result folder (create this folder if it is still not created):
- 
- ![copy csv](manual/08-create-upload-path.png) 
-
-* Navigate back to NiFi browser, you should see how bytes are read and transferred between the pipeline processors 
-
-  ![running data pipeline](manual/09-start-pipeline.png)
+Process groups, comments, and Funnels are also used in the pipeline.
