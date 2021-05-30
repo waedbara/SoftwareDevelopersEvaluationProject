@@ -69,7 +69,7 @@ Below table shows the processors and services used through this demo:
 | ForkRecord        | To split a single record into multiple records, used to split a json record with an array field into multiple records each one with one element of the array |
 | UpdateAttribute   | Update an attribute value in the data file                                                                                                                   |
 
-### Services:
+### Services
 | Service Type                          | Purpose                                                                                        |
 |---------------------------------------|------------------------------------------------------------------------------------------------|
 | CSVReader                             | To a data file content as a CSV                                                                |
@@ -81,4 +81,4 @@ Below table shows the processors and services used through this demo:
 | RedisDistributedMapCacheClientService | To use Redis as a cache, used by Wait and Notify processors to track listening keys and values |
 | FreeFormTextRecordSetWriter           | To convert data file to a text, mainly used to generate the Cypher queries                     |
 
-Process groups, comments, and Funnels are also used in the pipeline.
+Process groups, comments, input ports, output ports, and Funnels are also used in the pipeline.
